@@ -1,27 +1,27 @@
-// app_server/controllers/travel.js
-
-const fs = require('fs');
-const path = require('path');
-
-const tripsFilePath = path.join(__dirname, '..', '..', 'public', 'data', 'trips.json');
-
-const tripDetails = (req, res) => {
-  const tripCode = req.params.tripCode;
-  fs.readFile(tripsFilePath, 'utf8', (err, data) => {
-    if (err) {
-      res.status(500).render('error', { message: 'Could not read file' });
-    } else {
-      const trips = JSON.parse(data);
-      const trip = trips.find(t => t.code === tripCode);
-      if (trip) {
-        res.render('trip-detail', { trip });
-      } else {
-        res.status(404).render('error', { message: 'Trip not found' });
-      }
+const tripsEndpoint = 'http://localhost:3000/api/trips';
+const options = {
+    method: 'GET',
+    headers: {
+        'Accept' : 'application.json'
     }
-  });
+}
+
+//var fs = require('fs');
+//var trips = JSON.parse(fs.readFileSync('./data/trips.json', 'utf8'));
+
+/* Get tavel view */
+const travel = async function (req, res, nect) {
+    //console.log('TRAVEL CONTROLLER BEGIN');
+    await fetch(tripsEndpoint, options)
+        .then(res => res.json())
+        .then(json => {
+            // console.log(json);
+            res.render('travel', {title: 'Travlr Getaways', trips: json});
+        })
+        .catch(err => res.status(500).send(e.message));
+    //console.log('TRAVEL CONTROLLER AFTER RENDER');
 };
 
 module.exports = {
-  tripDetails
+    travel
 };
