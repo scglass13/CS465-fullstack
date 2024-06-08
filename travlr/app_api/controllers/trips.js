@@ -1,46 +1,39 @@
-const mongoose = require('mongoose');
-const Trip = require('../models/travlr');
-const Model = mongoose.model('trips');
+// app_api/controllers/trips.js
 
-// GET: /trips - list all the trips
-// regardless of outcome, response must include HTML status code
-// and JSON message to the requesting client
-const tripsList = async (req, res) => {
-    const q = await Model
-        .find({}) // no filter, return all records
-        .exec();
-        
-        console.log(q);
+const fs = require('fs');
+const path = require('path');
 
-        if(!q) {
-            // database returned no data
-            return res.status(404).json(err);
-        } else {
-            // return resulting trip list
-            return res.status(200).json(q);
-        }
+const tripsFilePath = path.join(__dirname, '..', '..', 'public', 'data', 'trips.json');
+
+const tripsList = (req, res) => {
+  fs.readFile(tripsFilePath, 'utf8', (err, data) => {
+    if (err) {
+      res.status(500).json({ "error": "Could not read file" });
+    } else {
+      const trips = JSON.parse(data);
+      res.status(200).json(trips);
+    }
+  });
 };
 
-// GET: /trips - list all the trips
-// regardless of outcome, response must include HTML status code
-// and JSON message to the requesting client
-const tripsFindByCode = async (req, res) => {
-    const q = await Model
-        .find({'code' : req.params.tripCode}) // return single record
-        .exec();
-        
-        console.log(q);
-
-        if(!q) {
-            // database returned no data
-            return res.status(404).json(err);
-        } else {
-            // return resulting trip list
-            return res.status(200).json(q);
-        }
+const tripsFindByCode = (req, res) => {
+  const tripCode = req.params.tripCode;
+  fs.readFile(tripsFilePath, 'utf8', (err, data) => {
+    if (err) {
+      res.status(500).json({ "error": "Could not read file" });
+    } else {
+      const trips = JSON.parse(data);
+      const trip = trips.find(t => t.code === tripCode);
+      if (trip) {
+        res.status(200).json(trip);
+      } else {
+        res.status(404).json({ "message": "Trip not found" });
+      }
+    }
+  });
 };
 
 module.exports = {
-    tripsList,
-    tripsFindByCode
+  tripsList,
+  tripsFindByCode
 };
