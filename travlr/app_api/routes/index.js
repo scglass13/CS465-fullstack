@@ -11,6 +11,10 @@ router
   .post(tripsController.tripsAddTrip); // POST method adds a trip
 
 // GET method routes tripsFindByCode - requires parameter
-router.route("/trips/:tripCode").get(tripsController.tripsFindByCode);
+// PUT method routes tripsUpdateTrip - requires parameter
+router
+  .route("/trips/:tripCode")
+  .get(tripsController.tripsFindByCode)
+  .put(tripsController.tripsUpdateTrip);
 
 module.exports = router;
