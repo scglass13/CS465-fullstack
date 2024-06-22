@@ -1,6 +1,10 @@
+console.log("Loading user model"); // debugging
+
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
+
+console.log("Regestering User schema"); // debugging
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -45,4 +49,6 @@ userSchema.methods.generateJwt = function () {
   );
 };
 
-module.exports = mongoose.model("User", userSchema);
+mongoose.model("User", userSchema);
+
+console.log("User schema registered");
