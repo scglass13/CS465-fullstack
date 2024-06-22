@@ -6,7 +6,6 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const passport = require("passport");
-const mongoose = require("mongoose");
 
 const indexRouter = require("./app_server/routes/index");
 const usersRouter = require("./app_server/routes/users");
@@ -76,6 +75,15 @@ app.use((err, req, res, next) => {
   if (err.name === "UnauthorizedError") {
     res.status(401).json({ message: err.name + ": " + err.message });
   }
+});
+
+// check for silent failures
+process.on("uncaughtException", (err) => {
+  console.log("Uncaught Exception:", err);
+});
+
+process.on("unhandledRejection", (err) => {
+  console.log("Unhandled Rejection:", err);
 });
 
 module.exports = app;

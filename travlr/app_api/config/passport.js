@@ -9,7 +9,7 @@ passport.use(
       usernameField: "email",
     },
     (username, password, done) => {
-      User.findOne({ email: username }, (err, User) => {
+      User.findOne({ email: username }, (err, user) => {
         if (err) {
           return done(err);
         }
@@ -23,7 +23,7 @@ passport.use(
             message: "Incorrect password.",
           });
         }
-        return done(null, User);
+        return done(null, user);
       });
     }
   )
