@@ -1,12 +1,12 @@
 console.log("Loading user model"); // debugging
 
-const mongoose = require("mongoose");
-const crypto = require("crypto");
-const jwt = require("jsonwebtoken");
+var mongoose = require("mongoose");
+var crypto = require("crypto");
+var jwt = require("jsonwebtoken");
 
 console.log("Regestering User schema"); // debugging
 
-const userSchema = new mongoose.Schema({
+var userSchema = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
