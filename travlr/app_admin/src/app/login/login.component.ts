@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
-import { User } from '../models/user';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-
 export class LoginComponent implements OnInit {
   public formError: string = '';
   public credentials = {
@@ -20,7 +22,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService
-  ) { }
+  ) {}
 
   ngOnInit() {}
 
@@ -35,7 +37,7 @@ export class LoginComponent implements OnInit {
 
   private doLogin(): void {
     this.authenticationService.login(this.credentials)
-    .then(() => this.router.navigateByUrl('#'))
-    .catch((message) => this.formError = message);
+      .then(() => this.router.navigateByUrl('/trips'))  
+      .catch((message) => this.formError = message);
   }
-} 
+}

@@ -1,31 +1,29 @@
 require("dotenv").config();
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const passport = require("passport");
+const mongoose = require("mongoose");
+const createError = require("http-errors");
 
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-var passport = require("passport");
-var mongoose = require("mongoose");
+const indexRouter = require("./app_server/routes/index");
+const usersRouter = require("./app_server/routes/users");
+const travelRouter = require("./app_server/routes/travel");
+const apiRouter = require("./app_api/routes/index");
 
-var indexRouter = require("./app_server/routes/index");
-var usersRouter = require("./app_server/routes/users");
-var travelRouter = require("./app_server/routes/travel");
-var apiRouter = require("./app_api/routes/index");
-
-var handlebars = require("hbs");
+const handlebars = require("hbs");
+const app = express();
 
 // Bring in the database
 require("./app_api/models/db");
 
-// bring in passport
+// Bring in passport
 require("./app_api/config/passport");
 
 // Bring in Schemas
 require("./app_api/models/travlr");
 require("./app_api/models/user");
-
-var app = express();
 
 // Enable CORS for all routes
 app.use((req, res, next) => {
@@ -66,23 +64,19 @@ app.use(function (req, res, next) {
 
 // Error handler
 app.use(function (err, req, res, next) {
-  // Set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  // Render the error page
   res.status(err.status || 500);
   res.render("error");
 });
 
-// catch unauthorized error and create 401
 app.use((err, req, res, next) => {
   if (err.name === "UnauthorizedError") {
     res.status(401).json({ message: err.name + ": " + err.message });
   }
 });
 
-// check for silent failures
 process.on("uncaughtException", (err) => {
   console.log("Uncaught Exception:", err);
 });

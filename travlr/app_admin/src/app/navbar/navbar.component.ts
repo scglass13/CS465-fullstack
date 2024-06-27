@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from
-'../services/authentication.service';
+import { CommonModule } from '@angular/common';
+import { AuthenticationService } from '../services/authentication.service';
+import { RouterModule } from '@angular/router';
+import { Router } from 'express';
+
 @Component({
   selector: 'app-navbar',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
+
 export class NavbarComponent implements OnInit {
 
   constructor(
@@ -18,7 +24,7 @@ export class NavbarComponent implements OnInit {
     return this.authenticationService.isLoggedIn();
     }
 
-  private onLogout(): void {
+  public onLogout(): void {
     return this.authenticationService.logout();
   }
 } 
