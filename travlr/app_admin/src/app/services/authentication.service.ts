@@ -3,17 +3,20 @@ import { BROWSER_STORAGE } from '../storage';
 import { User } from '../models/user';
 import { AuthResponse } from '../models/authresponse';
 import { TripDataService } from '../services/trip-data.service';
+
 @Injectable({
 providedIn: 'root'
 })
+
 export class AuthenticationService {
+
   constructor(
     @Inject(BROWSER_STORAGE) private storage: Storage,
     private tripDataService: TripDataService
   ) { }
 
   public getToken(): string {
-    return this.storage.getItem('travlr-token');
+    return this.storage.getItem('travlr-token') || '';
   }
 
   public saveToken(token: string): void {
@@ -53,5 +56,6 @@ export class AuthenticationService {
       JSON.parse(atob(token.split('.')[1]));
       return { email, name } as User;
     }
+    return { email: '', name: '' } as User; // ensure a User object is always returned
   }
 }

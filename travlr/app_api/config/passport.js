@@ -15,7 +15,7 @@ passport.use(
         }
         if (!user) {
           return done(null, false, {
-            message: "Incorrect username.",
+            message: "Incorrect email.",
           });
         }
         if (!user.validPassword(password)) {
